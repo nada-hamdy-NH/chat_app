@@ -1,5 +1,5 @@
 import 'dart:async';
-import 'package:chat_app/core/constraints/assets_images.dart';
+import 'package:chat_app/core/constants/assets_images.dart';
 import 'package:chat_app/core/helpers/spacing.dart';
 import 'package:chat_app/core/themes/styles.dart';
 import 'package:chat_app/features/home/presentation/views/home_screen.dart';
