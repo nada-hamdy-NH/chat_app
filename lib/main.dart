@@ -17,6 +17,7 @@ class MyApp extends StatelessWidget {
       designSize: Size( 375,812),
       minTextAdapt: true,
       child:  MaterialApp(
+      debugShowCheckedModeBanner: false,
       home: SplashScreen()
     ));
   }
