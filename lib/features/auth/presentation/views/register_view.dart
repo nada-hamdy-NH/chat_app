@@ -6,17 +6,21 @@ import 'package:chat_app/features/auth/presentation/views/widgets/register_image
 import 'package:chat_app/features/home/presentation/views/home_screen.dart';
 import 'package:flutter/material.dart';
 
-class RegisterView extends StatelessWidget {
+class RegisterView extends StatefulWidget {
   const RegisterView({super.key});
-  
-  
+
   @override
-  Widget build(BuildContext context) {
-    TextEditingController emailController = TextEditingController();
+  State<RegisterView> createState() => _RegisterViewState();
+}
+
+class _RegisterViewState extends State<RegisterView> {
+  bool isObscureText = true;
+  TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
   TextEditingController nameController = TextEditingController();
   TextEditingController phoneController = TextEditingController();
-
+  @override
+  Widget build(BuildContext context) {
     return  SafeArea(child: Scaffold(
       backgroundColor: Colors.white,
       body: SingleChildScrollView(
@@ -34,13 +38,21 @@ class RegisterView extends StatelessWidget {
                  verticalSpace(20),
                  TextFormFieldWidget(labelText: "Phone", hintText: "Enter your phone", prefixIcon: Icons.phone, controller: phoneController,),
                  verticalSpace(20),
-                 TextFormFieldWidget(labelText: "Password", hintText: "Enter your password", prefixIcon: Icons.lock_outline_sharp, controller: passwordController,),
+                 TextFormFieldWidget(labelText: "Password", hintText: "Enter your password",
+                 prefixIcon:Icons.lock_outline_sharp,controller: passwordController,
+                isObscureText:isObscureText,
+              suffixIcon:GestureDetector(onTap: (){
+                setState(() {
+                  isObscureText = !isObscureText;
+                });
+              },child:Icon( isObscureText ? Icons.visibility_off : Icons.visibility))
+              ,),
                  verticalSpace(30),
                  ButtonWidget(buttonText: 'Register', onPressed: () {
                    Navigator.pushReplacement(context,MaterialPageRoute(builder: (context)=>const HomeScreen()));
                  }),
                  verticalSpace(30),
-                 AlreadyHaveAnAccount(),
+                 const AlreadyHaveAnAccount(),
             ]),
           ),
         ),

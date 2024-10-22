@@ -53,7 +53,7 @@ class TextFormFieldWidget extends StatelessWidget {
             prefixIcon: Icon(prefixIcon),
             suffixIcon: suffixIcon
           ),
-           obscureText: isObscureText??false,
+           obscureText: isObscureText ?? false,
         
         ),
       ),
