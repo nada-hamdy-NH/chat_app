@@ -14,7 +14,7 @@ class DontHaveAnAccount extends StatelessWidget {
         children: <TextSpan>[
         TextSpan(
           text: 'Don’t have an account?',
-          style: grey17Normal,
+          style: grey15Normal,
         ),
           TextSpan(
                 text: '   Register here',

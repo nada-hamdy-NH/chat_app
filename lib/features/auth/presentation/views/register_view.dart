@@ -3,7 +3,7 @@ import 'package:chat_app/core/shared_widgets/button_widget.dart';
 import 'package:chat_app/core/shared_widgets/text_form_field_widget.dart';
 import 'package:chat_app/features/auth/presentation/views/widgets/already_have_an_account.dart';
 import 'package:chat_app/features/auth/presentation/views/widgets/register_image_and_text.dart';
-import 'package:chat_app/features/home/presentation/views/home_screen.dart';
+import 'package:chat_app/features/home/presentation/views/home_view.dart';
 import 'package:flutter/material.dart';
 
 class RegisterView extends StatefulWidget {
@@ -49,7 +49,7 @@ class _RegisterViewState extends State<RegisterView> {
               ,),
                  verticalSpace(30),
                  ButtonWidget(buttonText: 'Register', onPressed: () {
-                   Navigator.pushReplacement(context,MaterialPageRoute(builder: (context)=>const HomeScreen()));
+                   Navigator.pushReplacement(context,MaterialPageRoute(builder: (context)=>const HomeView()));
                  }),
                  verticalSpace(30),
                  const AlreadyHaveAnAccount(),

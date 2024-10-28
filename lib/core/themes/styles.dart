@@ -13,6 +13,11 @@ color: Colors.black,
 fontSize: 28 , 
 fontWeight: FontWeight.bold
 );
+TextStyle  black28W500 = const TextStyle(
+color: Colors.black, 
+fontSize: 28 , 
+fontWeight: FontWeight.w500
+);
 TextStyle  black25Bold = const TextStyle(
 color: Colors.black, 
 fontSize: 25 , 
@@ -30,7 +35,7 @@ fontSize: 23 ,
 fontWeight: FontWeight.normal
 );
 
-TextStyle  black23Bold = const TextStyle(
+TextStyle  black2Bold = const TextStyle(
 color: Colors.black, 
 fontSize: 23 , 
 fontWeight: FontWeight.bold
@@ -40,14 +45,29 @@ color: Colors.black,
 fontSize: 20 , 
 fontWeight: FontWeight.bold
 );
+TextStyle  black20semiBold = const TextStyle(
+color: Colors.black, 
+fontSize: 20 , 
+fontWeight: FontWeight.w600
+);
 TextStyle  black17Bold = const TextStyle(
 color: Colors.black, 
 fontSize: 17 , 
 fontWeight: FontWeight.bold
 );
-TextStyle  grey17Normal = TextStyle(
+TextStyle  grey15Normal = TextStyle(
 color: Colors.grey.shade800, 
 fontSize: 15 , 
+fontWeight: FontWeight.w500
+);
+TextStyle  grey20bold = TextStyle(
+color: Colors.grey.shade600, 
+fontSize: 20 , 
+fontWeight: FontWeight.w700
+);
+TextStyle  grey17bold = TextStyle(
+color: Colors.grey, 
+fontSize: 17, 
 fontWeight: FontWeight.w500
 );
 TextStyle  black15Bold = const TextStyle(
