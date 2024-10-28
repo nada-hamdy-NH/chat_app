@@ -10,7 +10,7 @@ class RegisterImageAndText extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
         children: [
-          const Image(image: AssetImage(AssetsImages.login_image),height: 250,width: 250,),
+          const Image(image: AssetImage(AssetsImages.loginImage),height: 250,width: 250,),
           verticalSpace(10),
           Text("Register To New Account",style:black25Bold),
         ]

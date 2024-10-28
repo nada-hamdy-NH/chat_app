@@ -15,7 +15,7 @@ class LoginImageAndText extends StatelessWidget {
           width: 250.w,
           decoration:  const BoxDecoration(
             image:  DecorationImage(
-              image:  AssetImage(AssetsImages.login_image),
+              image:  AssetImage(AssetsImages.loginImage),
               fit:  BoxFit.fill,
         ))),
         Text("Log in to your account",style:black28Bold
