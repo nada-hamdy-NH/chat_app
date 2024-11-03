@@ -65,7 +65,7 @@ color: Colors.grey.shade600,
 fontSize: 20 , 
 fontWeight: FontWeight.w700
 );
-TextStyle  grey17bold = TextStyle(
+TextStyle  grey17bold = const TextStyle(
 color: Colors.grey, 
 fontSize: 17, 
 fontWeight: FontWeight.w500
@@ -79,4 +79,10 @@ TextStyle  mainColor17Normal = const TextStyle(
 color: ColorManager.mainColor, 
 fontSize: 17 , 
 fontWeight: FontWeight.normal
+);
+
+TextStyle  white17Bold = const TextStyle(
+color: Colors.white,
+fontSize: 17 ,
+fontWeight: FontWeight.bold
 );

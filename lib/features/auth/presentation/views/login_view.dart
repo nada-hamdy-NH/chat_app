@@ -1,9 +1,11 @@
 import 'package:chat_app/core/helpers/spacing.dart';
 import 'package:chat_app/core/shared_widgets/button_widget.dart';
 import 'package:chat_app/core/shared_widgets/text_form_field_widget.dart';
+import 'package:chat_app/core/themes/colos.dart';
+import 'package:chat_app/core/themes/styles.dart';
 import 'package:chat_app/features/auth/presentation/views/widgets/login_image_and_text.dart';
 import 'package:chat_app/features/auth/presentation/views/widgets/dont_have_an_account.dart';
-import 'package:chat_app/features/home/presentation/views/home_view.dart';
+import 'package:chat_app/features/chats/presentation/views/chats_view.dart';
 import 'package:flutter/material.dart';
 
 class LoginView extends StatefulWidget {
@@ -48,8 +50,8 @@ class _LoginViewState extends State<LoginView> {
               },child:Icon( isObscureText ? Icons.visibility_off:Icons.visibility))
               ,),
                 verticalSpace(30),
-                 ButtonWidget(buttonText: 'Login',onPressed: () {
-                  Navigator.pushReplacement(context,MaterialPageRoute(builder: (context)=>const HomeView()));
+                 ButtonWidget(buttonText: 'Login',buttonBackgroundColor:ColorManager.mainColor,buttonTextStyle: black17Bold,onPressed: () {
+                  Navigator.pushReplacement(context,MaterialPageRoute(builder: (context)=>const ChatsView()));
                 },),
                 verticalSpace(30),
                const DontHaveAnAccount(),
