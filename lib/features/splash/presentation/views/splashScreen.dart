@@ -1,9 +1,12 @@
 import 'dart:async';
 import 'package:chat_app/core/constants/assets_images.dart';
+import 'package:chat_app/core/di/dependency_injection.dart';
 import 'package:chat_app/core/helpers/spacing.dart';
 import 'package:chat_app/core/themes/styles.dart';
+import 'package:chat_app/features/auth/presentation/view_model/auth_cubit.dart';
 import 'package:chat_app/features/auth/presentation/views/login_view.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -18,7 +21,11 @@ class _SplashScreenState extends State<SplashScreen> {
   void initState() {
         Timer(const Duration(seconds: 3),
         (){
-          Navigator.pushReplacement(context, MaterialPageRoute( builder:(context)=>const LoginView()));
+          Navigator.pushReplacement(context, MaterialPageRoute( 
+            builder:(context)=>BlocProvider(
+               create: (context) => getIt<AuthCubit>(),
+               child: const LoginView()))
+            );
         });
     super.initState();
 
