@@ -22,7 +22,7 @@ class StatusView extends StatelessWidget {
          const  AddStatus(),
           verticalSpace(30),
           Text("Recent updates",style: grey17bold,),
-          const RecentUpdates(circleAvatarColor: ColorManager.mainColor,sizeBoxHeight: 300),
+         RecentUpdates(circleAvatarColor: ColorManager.mainColor,sizeBoxHeight: 300.h),
           verticalSpace(20),
          Text("Viewed updates",style: grey17bold,),
          RecentUpdates(circleAvatarColor: Colors.grey,sizeBoxHeight: 300.h,),

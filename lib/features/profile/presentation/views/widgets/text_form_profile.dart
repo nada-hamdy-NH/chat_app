@@ -4,6 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 TextField customTextField({required String hintText,  TextEditingController? controller}) =>TextField(
            controller: controller,
           minLines: null,
+          
             decoration: InputDecoration(
               hintText: hintText,
               fillColor: Colors.white,

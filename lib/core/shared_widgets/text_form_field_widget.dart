@@ -8,17 +8,17 @@ class TextFormFieldWidget extends StatelessWidget {
   final Widget? suffixIcon;
   final bool? isObscureText;
   final TextEditingController? controller;
+  final Function(String) validate ; 
 
- TextFormFieldWidget({super.key, required this.labelText, required this.hintText, this.prefixIcon, this.suffixIcon, this.isObscureText , this.controller});
+ const TextFormFieldWidget({super.key, required this.labelText, required this.hintText, this.prefixIcon, this.suffixIcon, this.isObscureText ,
+  this.controller, required this.validate,});
    
 
   @override
   Widget build(BuildContext context) {
-  return Column(children: [
-    Container(
+  return  Container(
       width: 340.w,
       height: 70.h,
-      child: Form(
         child: TextFormField(
           controller: controller,
           decoration: InputDecoration(
@@ -54,11 +54,12 @@ class TextFormFieldWidget extends StatelessWidget {
             suffixIcon: suffixIcon
           ),
            obscureText: isObscureText ?? false,
+           validator: (value) { 
+            return validate(value!);
+            }
         
         ),
-      ),
-    )
-  ],);
+      );
 
   }
 }

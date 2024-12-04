@@ -53,7 +53,7 @@ class RecentUpdates extends StatelessWidget {
                 Text('${recentStatus[index].date}, ${recentStatus[index].time}',style: grey17bold,),
               ]
             ),
-            const SizedBox(width: 130,),
+           SizedBox(width: 115.w,),
             sizeBoxHeight == 300.h ? const SizedBox() :
             const Icon(Icons.call,color: ColorManager.mainColor,),
             ],)
