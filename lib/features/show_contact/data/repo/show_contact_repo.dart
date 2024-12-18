@@ -1,5 +1,6 @@
 import 'package:chat_app/core/api_services/fetch_api_services.dart';
 import 'package:chat_app/features/auth/data/models/auth_model.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 
 class ShowContactRepo {
@@ -13,8 +14,10 @@ class ShowContactRepo {
   if(querySnapshot.docs.isNotEmpty){
      userData.clear;
 for (var elemrnt in querySnapshot.docs) {
-
-      userData.add(UserModel.fromSnapShots(elemrnt));
+     if(elemrnt.id != FirebaseAuth.instance.currentUser!.uid){
+         userData.add(UserModel.fromSnapShots(elemrnt));
+     }
+     
       
   }
   return userData;

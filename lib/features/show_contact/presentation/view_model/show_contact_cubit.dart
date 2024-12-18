@@ -1,7 +1,8 @@
 import 'package:chat_app/core/helpers/lists.dart';
 import 'package:chat_app/features/show_contact/data/repo/show_contact_repo.dart';
 import 'package:chat_app/features/show_contact/presentation/view_model/show_contact_states.dart';
-import 'package:flutter/src/widgets/framework.dart';
+import 'package:flutter/material.dart';
+
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 

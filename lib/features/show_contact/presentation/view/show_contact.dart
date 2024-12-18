@@ -1,5 +1,8 @@
+import 'package:chat_app/core/di/dependency_injection.dart';
 import 'package:chat_app/core/helpers/spacing.dart';
 import 'package:chat_app/core/themes/colos.dart';
+import 'package:chat_app/features/chats/presentation/view_model/add_chats_data_cubit.dart';
+import 'package:chat_app/features/chats/presentation/views/chat_view.dart';
 import 'package:chat_app/features/show_contact/presentation/view_model/show_contact_cubit.dart';
 import 'package:chat_app/features/show_contact/presentation/view_model/show_contact_states.dart';
 import 'package:flutter/material.dart';
@@ -57,14 +60,29 @@ class ShowContact extends StatelessWidget {
                 child: BlocBuilder<ShowContactCubit, ShowContactStates>(
                   builder: (context , state){
                   if(state is SuccessShowContactState){
-                  
                    return ListView.builder(
                     itemCount: state.userData.length,
                     itemBuilder: (context , index){
-                      return ListTile(
-                        leading: ClipOval(child: Image(image: AssetImage(state.userData[index].image),width: 60, height: 60,fit: BoxFit.cover, ),),
-                        title: Text(state.userData[index].name),
-                        subtitle:const  Text("welcome to chat app"),
+                      return InkWell(
+                        onTap:() {
+                          final user = state.userData[index];
+                           Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) =>BlocProvider(create: (context) =>getIt2<AddChatsDataCubit>(),
+                          child: ChatView(
+                                     receiverId:user.uid,
+                                    userName: user.name,
+                                    userImage: user.image,
+                                  ),
+                                ),
+                              ));
+                        } ,
+                        child: ListTile(
+                          leading: ClipOval(child: Image(image: AssetImage(state.userData[index].image),width: 60, height: 60,fit: BoxFit.cover, ),),
+                          title: Text(state.userData[index].name),
+                          subtitle:const  Text("welcome to chat app"),
+                        ),
                       ) ;
                     });
                   } 
