@@ -1,6 +1,5 @@
 import 'package:chat_app/core/helpers/spacing.dart';
 import 'package:chat_app/core/themes/colos.dart';
-import 'package:chat_app/features/chats/presentation/views/chat_view.dart';
 import 'package:flutter/material.dart';
 
 class MessageItems extends StatelessWidget {
@@ -14,7 +13,7 @@ class MessageItems extends StatelessWidget {
   Widget build(BuildContext context) {
     return  InkWell(
       onTap: (){
-        Navigator.push(context, MaterialPageRoute(builder: (context)=>const ChatView()));
+       // Navigator.push(context, MaterialPageRoute(builder: (context)=> ChatView()));
       },
       child: ListTile(
         leading:ClipOval(

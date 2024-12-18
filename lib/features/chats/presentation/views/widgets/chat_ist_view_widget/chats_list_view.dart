@@ -1,6 +1,6 @@
 import 'package:chat_app/core/constants/assets_images.dart';
 import 'package:chat_app/core/helpers/lists.dart';
-import 'package:chat_app/features/chats/presentation/views/widgets/message_items.dart';
+import 'package:chat_app/features/chats/presentation/views/widgets/chat_ist_view_widget/message_items.dart';
 import 'package:flutter/material.dart';
 
 class ChatsListView extends StatelessWidget {
