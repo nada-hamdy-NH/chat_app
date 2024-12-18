@@ -34,6 +34,11 @@ color: Colors.black,
 fontSize: 23 , 
 fontWeight: FontWeight.normal
 );
+TextStyle  black18Normal = const TextStyle(
+color: Colors.black, 
+fontSize: 18 , 
+fontWeight: FontWeight.normal
+);
 
 TextStyle  black2Bold = const TextStyle(
 color: Colors.black, 

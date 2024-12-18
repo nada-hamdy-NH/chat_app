@@ -1,92 +1,125 @@
-import 'package:chat_app/core/constants/assets_images.dart';
 import 'package:chat_app/core/helpers/lists.dart';
 import 'package:chat_app/core/helpers/spacing.dart';
+import 'package:chat_app/core/helpers/strings.dart';
 import 'package:chat_app/core/themes/colos.dart';
 import 'package:chat_app/core/themes/styles.dart';
-import 'package:chat_app/features/chats/data/models/chat_model.dart';
+import 'package:chat_app/features/chats/presentation/views/widgets/chat_view_widget/add_message_button.dart';
+import 'package:chat_app/features/chats/presentation/views/widgets/chat_view_widget/add_message_field.dart';
+import 'package:chat_app/features/chats/presentation/views/widgets/chat_view_widget/chat_view_appBar.dart';
+import 'package:chat_app/features/chats/presentation/views/widgets/chat_view_widget/chat_view_background_image.dart';
 import 'package:chat_bubbles/bubbles/bubble_special_one.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class ChatView extends StatefulWidget {
-  const ChatView({super.key});
+  final String userName;
+  final String userImage;
+
+  final String receiverId;
+
+  const ChatView(
+      {super.key,
+      required this.receiverId,
+      required this.userName,
+      required this.userImage});
 
   @override
   State<ChatView> createState() => _ChatViewState();
 }
 
 class _ChatViewState extends State<ChatView> {
+  TextEditingController messageController = TextEditingController();
+  final ScrollController _scrollController = ScrollController();
+  addedMessage(newMessage) {
+    setState(() {
+      chatMessages.add(newMessage);
+    });
+  }
+    void _scrollToBottom() {
+    if (_scrollController.hasClients) {
+      _scrollController.jumpTo(_scrollController.position.maxScrollExtent);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    TextEditingController messageController = TextEditingController();
-   
-   String myName = "chat1" ; 
+    String chatId = currentUserId.compareTo(widget.receiverId) < 0
+        ? "${currentUserId}_${widget.receiverId}"
+        : "${widget.receiverId}_$currentUserId";
+
     SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
         statusBarColor: ColorManager.mainColor,
         systemNavigationBarColor: Colors.white));
 
+      
+
     return SafeArea(
         child: Scaffold(
-            appBar: AppBar(
-              backgroundColor: Colors.white,
-              systemOverlayStyle: const SystemUiOverlayStyle(
-                  statusBarColor: ColorManager.mainColor,
-                  systemNavigationBarColor: Colors.white),
-              title: Row(
-                children: [
-                  const ClipOval(
-                    child: Image(
-                      image: AssetImage(AssetsImages.iron),
-                      height: 40,
-                      width: 40,
-                      fit: BoxFit.cover,
-                    ),
-                  ),
-                  horizontalSpace(10),
-                  Text(
-                    "Chat",
-                    style: black23Normal,
-                  ),
-                ],
-              ),
-              actions: [
-                IconButton(
-                    onPressed: () {},
-                    icon: const Icon(Icons.video_call, size: 25)),
-                IconButton(
-                    onPressed: () {}, icon: const Icon(Icons.call, size: 25)),
-                IconButton(
-                    onPressed: () {},
-                    icon: const Icon(Icons.more_vert_sharp, size: 25)),
-              ],
-            ),
+            appBar: ChatViewAppbar(
+                userImage: widget.userImage, userName: widget.userName),
             body: Column(children: [
               Expanded(
                   child: Stack(children: [
-                const Positioned.fill(
-                  child: Image(
-                    image: AssetImage(AssetsImages.whatsAppBackground),
-                    fit: BoxFit.cover,
-                  ),
-                ),
+                const ChatViewBackgroundImage(),
                 Padding(
                   padding: const EdgeInsets.symmetric(
                       horizontal: 15.0, vertical: 10),
-                  child: ListView.builder(
-                      itemCount: chatMessages.length,
-                      itemBuilder: (context, index) {
-                        if(chatMessages.isEmpty){
-                          return  const SizedBox() ; 
-                        }else{
-                          final message = chatMessages[index].message;
-                        return  BubbleSpecialOne(
-                          color: Colors.white,
-                          text: message.toString(),
-                          textStyle: black23Normal,
-                          isSender: chatMessages[index].senderName ==myName ? true :false,
-                        );
-                      }}),
+                  child: StreamBuilder<QuerySnapshot>(
+                      stream: FirebaseFirestore.instance
+                          .collection("chats")
+                          .doc(chatId)
+                          .collection("messages")
+                          .orderBy("timestamp", descending: false)
+                          .snapshots(),
+                      builder: (context, snapshot) {
+                        if (snapshot.hasError) {
+      print("StreamBuilder error: ${snapshot.error}");
+      return Center(
+        child: Text("An error occurred: ${snapshot.error}"),
+      );
+    }
+                        if (snapshot.connectionState ==
+                            ConnectionState.waiting) {
+                          return const Center(
+                            child: CircularProgressIndicator(),
+                          );
+                        }
+
+                        if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
+                          return const Center(
+                            child: Text(
+                              "No messages yet.",
+                              style: TextStyle(color: Colors.grey),
+                            ),
+                          );
+                        }
+                        final messageFirestore = snapshot.data!.docs;
+                        WidgetsBinding.instance.addPostFrameCallback((_) {
+                    _scrollToBottom();
+                  });
+                        return ListView.builder(
+                          controller: _scrollController,
+                          reverse: true,
+                            itemCount: messageFirestore.length,
+                            itemBuilder: (context, index) {
+                              if (messageFirestore.isEmpty) {
+                                return const SizedBox();
+                              } else {
+                                 final message = messageFirestore[index];
+                               final isSender = message["senderId"] == currentUserId;
+                                return BubbleSpecialOne(
+                                  color: isSender
+                                      ? const Color(0xffDCF8C6)
+                                      : Colors.white,
+                                  text: message["message"] ?? "",
+                                  textStyle: black18Normal,
+                                  isSender: isSender , 
+                                );
+                              }
+                            });
+                      }),
                 ),
                 Positioned(
                   bottom: 0,
@@ -98,71 +131,24 @@ class _ChatViewState extends State<ChatView> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.end,
                       children: [
-                        Expanded(
-                          child: Container(
-                            height: 50.h,
-                            decoration:  BoxDecoration(
-                              color: Colors.white,
-                              borderRadius:
-                                  const BorderRadius.all(Radius.circular(25.0)),
-                              border:  Border(
-                                  bottom:
-                                      BorderSide(color: Colors.grey.shade400, width: 1)),
-                            ),
-                            child: TextFormField(
-                              controller: messageController,
-                              style: const TextStyle(color: Colors.black),
-                              decoration: InputDecoration(
-                                border: InputBorder.none,
-                                prefixIcon:const Icon(
-                                  Icons.emoji_emotions_outlined,
-                                  color: Colors.grey,size: 30,
-                                ),
-                                suffixIcon: Padding(
-                                  padding: const EdgeInsets.all(10),
-                                  child: Row(
-                                    mainAxisSize: MainAxisSize.min,
-                                    children: [
-                                      const Icon(
-                                        Icons.attach_file,
-                                        color: Colors.grey,
-                                        size: 30,
-                                      ),
-                                      horizontalSpace(10),
-                                      const Icon(Icons.camera_alt, color: Colors.grey,size: 30,),
-                                    ],
-                                  ),
-                                ),
-                                hintText: "Message",
-                                hintStyle:  const TextStyle(color: Colors.grey , fontSize: 20 , fontWeight: FontWeight.w500),
-                                contentPadding:  const EdgeInsets.symmetric(
-                                    horizontal: 10, vertical: 10),
-                              ),
-                            ),
-                          ),
+                        AddMessageField(
+                          messageController: messageController,
                         ),
                         horizontalSpace(10),
                         CircleAvatar(
-                          radius: 25.r,
-                          backgroundColor: ColorManager.mainColor,
-                          child: IconButton(
-                            onPressed: () {
-                              setState(() {
-                               if (messageController.text.isNotEmpty) {
-                                  chatMessages.add(ChatModel(senderName: myName, message: messageController.text));
-                                   
-                                        messageController.clear(); // Clear the input field after sending the message
-                                }
-                              
-                              });
-                            },
-                            icon: const Icon(Icons.send, color: Colors.white),
-                          ),
-                        )
+                            radius: 25.r,
+                            backgroundColor: ColorManager.mainColor,
+                            child: AddMessageButton(
+                              messageController: messageController,
+                              receiverId: widget.receiverId,
+                              onMessageAdded: addedMessage,
+                              scrollToBottom:_scrollToBottom
+                            ))
                       ],
                     ),
                   ),
                 )
+
               ]))
             ])));
   }
