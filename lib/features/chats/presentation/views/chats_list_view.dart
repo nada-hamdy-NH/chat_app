@@ -4,8 +4,8 @@ import 'package:chat_app/core/themes/colos.dart';
 import 'package:chat_app/features/calls/presentation/views/calls_view.dart';
 import 'package:chat_app/features/chats/presentation/view_model/botton_navigation_bar_cubit.dart';
 import 'package:chat_app/features/show_contact/presentation/view/show_contact.dart';
-import 'package:chat_app/features/chats/presentation/views/widgets/app_bar_widget.dart';
-import 'package:chat_app/features/chats/presentation/views/widgets/chats_list_view.dart';
+import 'package:chat_app/features/chats/presentation/views/widgets/chat_ist_view_widget/app_bar_widget.dart';
+import 'package:chat_app/features/chats/presentation/views/widgets/chat_ist_view_widget/chats_list_view.dart';
 import 'package:chat_app/features/show_contact/presentation/view_model/show_contact_cubit.dart';
 import 'package:chat_app/features/status/presentation/views/status_view.dart';
 
