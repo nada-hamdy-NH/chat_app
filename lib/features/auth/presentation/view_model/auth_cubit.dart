@@ -11,16 +11,18 @@ class AuthCubit extends Cubit<AuthStates>{
 GlobalKey<FormState> formKey = GlobalKey<FormState>();
 AuthCubit get(context) => BlocProvider.of(context);
 
-Future<bool> registerUser(String name , String email , String password , String phoneNumber)async{
+Future<bool> registerUser(String uid, String name , String email , String password , String phoneNumber)async{
   LoadingRegisterState();
   try{
     await authRepo.registerUser(UserModel(
+      uid: uid,
       name: name,
      email: email,
      password: password,
       phoneNumber: phoneNumber,
        image: "assets/images/iron.jpeg" 
       ));
+      
        emit( SuccessRegisterState("register successfully"));
        return true ; 
 

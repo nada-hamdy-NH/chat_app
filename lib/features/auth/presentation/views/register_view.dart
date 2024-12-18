@@ -1,3 +1,4 @@
+
 import 'package:chat_app/core/helpers/spacing.dart';
 import 'package:chat_app/core/shared_widgets/button_widget.dart';
 import 'package:chat_app/core/shared_widgets/text_form_field_widget.dart';
@@ -84,7 +85,7 @@ class _RegisterViewState extends State<RegisterView> {
                        buttonBackgroundColor: ColorManager.mainColor,
                         onPressed: () async{
                           if(formKey.currentState!.validate()){
-                            bool success = await BlocProvider.of<AuthCubit>(context).registerUser (nameController.text, emailController.text, passwordController.text, phoneController.text);
+                            bool success = await BlocProvider.of<AuthCubit>(context).registerUser ("currentUserId", nameController.text, emailController.text, passwordController.text, phoneController.text);
                             if(success == true){
                                Navigator.pushReplacement(context,MaterialPageRoute(builder: (context)=>const ChatsView()));
                             }
