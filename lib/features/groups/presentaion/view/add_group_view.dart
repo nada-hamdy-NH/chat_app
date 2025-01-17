@@ -2,7 +2,6 @@ import 'package:chat_app/core/helpers/lists.dart';
 import 'package:chat_app/core/helpers/spacing.dart';
 import 'package:chat_app/core/themes/colos.dart';
 import 'package:chat_app/core/themes/styles.dart';
-import 'package:chat_app/features/auth/data/models/auth_model.dart';
 import 'package:chat_app/features/groups/presentaion/view/add_group_widget/appBar_add_group.dart';
 import 'package:chat_app/features/groups/presentaion/view/group_view.dart';
 import 'package:chat_app/features/show_contact/presentation/view_model/show_contact_cubit.dart';
@@ -16,7 +15,7 @@ class AddGroupView extends StatefulWidget {
   @override
   State<AddGroupView> createState() => _AddGroupViewState();
 }
-List<UserModel>usersOfGroup = [];
+
 int count = 0;
 late  final  lengthOfUsers  ; 
  
@@ -28,7 +27,7 @@ class _AddGroupViewState extends State<AddGroupView> {
     _fetchInitialData();
   }
   Future<void> _fetchInitialData() async {
-    await Future.delayed(const Duration(seconds: 1)); // Simulate delay
+    await Future.delayed(const Duration(seconds: 2)); // Simulate delay
     setState(() {
       lengthOfUsers = userData.length; // Capture the initial length
     });
@@ -135,6 +134,7 @@ class _AddGroupViewState extends State<AddGroupView> {
            Navigator.push(context, MaterialPageRoute(builder: (context)=>const GroupView()));
          }
        } ,
+        shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(45))), 
        
        backgroundColor:usersOfGroup.isNotEmpty ? ColorManager.mainColor : Colors.lightGreen[100],
         child:const Icon(Icons.arrow_forward , color: Colors.white),

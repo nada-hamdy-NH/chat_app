@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 
 AppBar appBar =  AppBar(
         backgroundColor: Colors.white,
-        title: Text("New Group",style:black2Bold),
+        title: Text("New Group",style:black23Bold),
          actions: [IconButton(
           onPressed: (){},
          icon: Padding(
