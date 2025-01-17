@@ -40,7 +40,7 @@ fontSize: 18 ,
 fontWeight: FontWeight.normal
 );
 
-TextStyle  black2Bold = const TextStyle(
+TextStyle  black23Bold = const TextStyle(
 color: Colors.black, 
 fontSize: 23 , 
 fontWeight: FontWeight.bold
@@ -65,6 +65,14 @@ color: Colors.grey.shade800,
 fontSize: 15 , 
 fontWeight: FontWeight.w500
 );
+TextStyle  grey17Normal = TextStyle(
+color: Colors.grey.shade600, 
+fontSize: 17 , 
+fontWeight: FontWeight.w500
+);
+
+
+
 TextStyle  grey20bold = TextStyle(
 color: Colors.grey.shade600, 
 fontSize: 20 , 

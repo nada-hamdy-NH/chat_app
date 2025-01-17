@@ -1,12 +1,12 @@
 import 'package:chat_app/core/helpers/lists.dart';
 import 'package:chat_app/core/helpers/spacing.dart';
-import 'package:chat_app/core/helpers/strings.dart';
 import 'package:chat_app/core/themes/colos.dart';
 import 'package:chat_app/core/themes/styles.dart';
-import 'package:chat_app/features/chats/presentation/views/widgets/chat_view_widget/add_message_button.dart';
-import 'package:chat_app/features/chats/presentation/views/widgets/chat_view_widget/add_message_field.dart';
-import 'package:chat_app/features/chats/presentation/views/widgets/chat_view_widget/chat_view_appBar.dart';
-import 'package:chat_app/features/chats/presentation/views/widgets/chat_view_widget/chat_view_background_image.dart';
+import 'package:chat_app/features/auth/data/models/auth_model.dart';
+import 'package:chat_app/features/chats/presentation/views/widgets/home_widgets/add_message_button.dart';
+import 'package:chat_app/features/chats/presentation/views/widgets/home_widgets/add_message_field.dart';
+import 'package:chat_app/features/chats/presentation/views/widgets/home_widgets/chat_view_appBar.dart';
+import 'package:chat_app/features/chats/presentation/views/widgets/home_widgets/chat_view_background_image.dart';
 import 'package:chat_bubbles/bubbles/bubble_special_one.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
@@ -14,16 +14,13 @@ import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class ChatView extends StatefulWidget {
-  final String userName;
-  final String userImage;
-
-  final String receiverId;
+  final UserModel receiverData;
+  final UserModel currentUserData;
 
   const ChatView(
       {super.key,
-      required this.receiverId,
-      required this.userName,
-      required this.userImage});
+      required this.receiverData, required this.currentUserData,
+      });
 
   @override
   State<ChatView> createState() => _ChatViewState();
@@ -32,33 +29,45 @@ class ChatView extends StatefulWidget {
 class _ChatViewState extends State<ChatView> {
   TextEditingController messageController = TextEditingController();
   final ScrollController _scrollController = ScrollController();
+  var numberOfMessages = 0;
+  var numOfResult;
+ 
   addedMessage(newMessage) {
     setState(() {
+      numberOfMessages = chatMessages.length;
       chatMessages.add(newMessage);
+      numberOfMessages += 1;
+      numOfResult= numberOfMessages ; 
+      print(numberOfMessages);
     });
   }
-    void _scrollToBottom() {
+
+  void _scrollToBottom() {
     if (_scrollController.hasClients) {
-      _scrollController.jumpTo(_scrollController.position.maxScrollExtent);
+      _scrollController.animateTo(
+        _scrollController.position.maxScrollExtent,
+        duration: const Duration(milliseconds: 300),
+        curve: Curves.easeOut,
+      );
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    String chatId = currentUserId.compareTo(widget.receiverId) < 0
-        ? "${currentUserId}_${widget.receiverId}"
-        : "${widget.receiverId}_$currentUserId";
+    
+    final String currentUserId = widget.currentUserData.uid;
+    String chatId = currentUserId.compareTo(widget.receiverData.uid) < 0
+        ? "$currentUserId-${widget.receiverData.uid}"
+        : "${widget.receiverData.uid}-$currentUserId";
 
     SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
         statusBarColor: ColorManager.mainColor,
         systemNavigationBarColor: Colors.white));
 
-      
-
     return SafeArea(
         child: Scaffold(
             appBar: ChatViewAppbar(
-                userImage: widget.userImage, userName: widget.userName),
+                userImage: widget.receiverData.image, userName: widget.receiverData.name),
             body: Column(children: [
               Expanded(
                   child: Stack(children: [
@@ -75,11 +84,11 @@ class _ChatViewState extends State<ChatView> {
                           .snapshots(),
                       builder: (context, snapshot) {
                         if (snapshot.hasError) {
-      print("StreamBuilder error: ${snapshot.error}");
-      return Center(
-        child: Text("An error occurred: ${snapshot.error}"),
-      );
-    }
+                          print("StreamBuilder error: ${snapshot.error}");
+                          return Center(
+                            child: Text("An error occurred: ${snapshot.error}"),
+                          );
+                        }
                         if (snapshot.connectionState ==
                             ConnectionState.waiting) {
                           return const Center(
@@ -87,35 +96,27 @@ class _ChatViewState extends State<ChatView> {
                           );
                         }
 
-                        if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
-                          return const Center(
-                            child: Text(
-                              "No messages yet.",
-                              style: TextStyle(color: Colors.grey),
-                            ),
-                          );
-                        }
                         final messageFirestore = snapshot.data!.docs;
                         WidgetsBinding.instance.addPostFrameCallback((_) {
-                    _scrollToBottom();
-                  });
+                          _scrollToBottom();
+                        });
                         return ListView.builder(
-                          controller: _scrollController,
-                          reverse: true,
+                            controller: _scrollController,
                             itemCount: messageFirestore.length,
                             itemBuilder: (context, index) {
                               if (messageFirestore.isEmpty) {
                                 return const SizedBox();
                               } else {
-                                 final message = messageFirestore[index];
-                               final isSender = message["senderId"] == currentUserId;
+                                final message = messageFirestore[index];
+                                final isSender =
+                                    message["senderId"] == currentUserId;
                                 return BubbleSpecialOne(
                                   color: isSender
                                       ? const Color(0xffDCF8C6)
                                       : Colors.white,
                                   text: message["message"] ?? "",
                                   textStyle: black18Normal,
-                                  isSender: isSender , 
+                                  isSender: isSender,
                                 );
                               }
                             });
@@ -139,16 +140,17 @@ class _ChatViewState extends State<ChatView> {
                             radius: 25.r,
                             backgroundColor: ColorManager.mainColor,
                             child: AddMessageButton(
-                              messageController: messageController,
-                              receiverId: widget.receiverId,
-                              onMessageAdded: addedMessage,
-                              scrollToBottom:_scrollToBottom
-                            ))
+                              currentUserData:widget.currentUserData ,
+                              chatId: chatId,
+                            getNumberOfMessages: ()=> numOfResult.toString(),
+                                messageController: messageController,
+                                receiverData: widget.receiverData,
+                                onMessageAdded: addedMessage,
+                                scrollToBottom: _scrollToBottom))
                       ],
                     ),
                   ),
                 )
-
               ]))
             ])));
   }

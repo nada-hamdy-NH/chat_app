@@ -6,40 +6,39 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 class AuthCubit extends Cubit<AuthStates>{
   final AuthRepo authRepo ; 
-  AuthCubit(this.authRepo) : super(InitialAuthState());
+  late UserModel currentUserData ;
+  AuthCubit(this.authRepo ,) : super(InitialAuthState());
   
 GlobalKey<FormState> formKey = GlobalKey<FormState>();
 AuthCubit get(context) => BlocProvider.of(context);
 
-Future<bool> registerUser(String uid, String name , String email , String password , String phoneNumber)async{
+registerUser(String uid, String name , String email , String password , String phoneNumber)async{
   LoadingRegisterState();
   try{
-    await authRepo.registerUser(UserModel(
+    currentUserData=UserModel(
       uid: uid,
       name: name,
      email: email,
      password: password,
       phoneNumber: phoneNumber,
        image: "assets/images/iron.jpeg" 
-      ));
-      
-       emit( SuccessRegisterState("register successfully"));
-       return true ; 
+      );
+
+    await authRepo.registerUser(currentUserData);
+      emit( SuccessRegisterState("register successfully" , currentUserData));
 
 }catch(error){
   emit(ErrorRegisterState(error.toString()));
-  return false;
 }
 }
-Future<bool>loginUser(email , password)async{
+loginUser(email , password)async{
  emit(LoadingLoginState());
  try{
-  await authRepo.loginUser(email, password);
-  emit(SuccessLoginState());
-  return true;
+  currentUserData  = await authRepo.loginUser(email, password);
+  emit(SuccessLoginState(currentUserData));
+  
  }catch(error){
   emit(ErrorLoginState(error.toString()));
-  return false;
  }
 
 }

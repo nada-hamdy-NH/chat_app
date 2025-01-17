@@ -15,7 +15,7 @@ class ShowContactRepo {
      userData.clear;
 for (var elemrnt in querySnapshot.docs) {
      if(elemrnt.id != FirebaseAuth.instance.currentUser!.uid){
-         userData.add(UserModel.fromSnapShots(elemrnt));
+         userData.add(UserModel.fromSnapShots(elemrnt.data()));
      }
      
       

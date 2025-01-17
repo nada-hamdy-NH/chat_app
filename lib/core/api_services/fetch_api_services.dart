@@ -13,13 +13,16 @@ Future<QuerySnapshot<Map<String, dynamic>>> fetchUsersData() async {
 return querySnapshot ; 
 
 }
-Future<Map<String, dynamic>?> fetchUserData(String currentUserId) async {
+Future<Map<String, dynamic>?> fetchUserData(String currentUserId)
+ async {
 
  
   final querySnapshot = await firebaseFirestore.collection("Users").doc(currentUserId).get();
  final userData = querySnapshot.data();
 
 return userData ; 
+
+
 }
 
 

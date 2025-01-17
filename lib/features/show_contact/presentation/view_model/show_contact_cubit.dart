@@ -17,6 +17,7 @@ Future<bool> showContact()async{
   try{
    userData =  await showContactRepo.fetchUsersData(userData);
    emit(SuccessShowContactState(userData));
+  print(userData.length);
    return true;
 
   }catch(e){

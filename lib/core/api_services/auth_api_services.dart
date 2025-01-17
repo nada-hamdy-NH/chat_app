@@ -10,7 +10,7 @@ class AuthServices{
     try {
       final UserCredential credential = await firebaseAuth.createUserWithEmailAndPassword(
         email: userModel.email,
-        password: userModel.password
+        password: userModel.password!
       );
       return credential;  
     } on FirebaseAuthException catch (e) {

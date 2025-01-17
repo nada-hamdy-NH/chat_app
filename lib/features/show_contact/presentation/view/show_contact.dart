@@ -1,6 +1,7 @@
 import 'package:chat_app/core/di/dependency_injection.dart';
 import 'package:chat_app/core/helpers/spacing.dart';
 import 'package:chat_app/core/themes/colos.dart';
+import 'package:chat_app/features/auth/data/models/auth_model.dart';
 import 'package:chat_app/features/chats/presentation/view_model/add_chats_data_cubit.dart';
 import 'package:chat_app/features/chats/presentation/views/chat_view.dart';
 import 'package:chat_app/features/show_contact/presentation/view_model/show_contact_cubit.dart';
@@ -11,7 +12,8 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 
 class ShowContact extends StatelessWidget {
-  const ShowContact({super.key});
+   final UserModel currentUserData;
+    const ShowContact({super.key, required this.currentUserData });
 
   @override
   Widget build(BuildContext context) {
@@ -65,15 +67,20 @@ class ShowContact extends StatelessWidget {
                     itemBuilder: (context , index){
                       return InkWell(
                         onTap:() {
-                          final user = state.userData[index];
+                        final reciverData    = state.userData[index];
+                        if(reciverData.name.isNotEmpty){
+                           print("==============${reciverData.name}=========");
+                        }
+                        
+                        
                            Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                  builder: (context) =>BlocProvider(create: (context) =>getIt2<AddChatsDataCubit>(),
+                                  builder: (context) =>BlocProvider(create: (context) =>getIt<AddChatsDataCubit>(),
                           child: ChatView(
-                                     receiverId:user.uid,
-                                    userName: user.name,
-                                    userImage: user.image,
+                                    receiverData: reciverData,
+                                    currentUserData: currentUserData,
+                                    
                                   ),
                                 ),
                               ));

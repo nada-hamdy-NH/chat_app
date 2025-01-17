@@ -1,12 +1,16 @@
+import 'package:chat_app/core/di/dependency_injection.dart';
 import 'package:chat_app/core/helpers/spacing.dart';
 import 'package:chat_app/core/shared_widgets/button_widget.dart';
 import 'package:chat_app/core/shared_widgets/text_form_field_widget.dart';
 import 'package:chat_app/core/themes/colos.dart';
 import 'package:chat_app/core/themes/styles.dart';
 import 'package:chat_app/features/auth/presentation/view_model/auth_cubit.dart';
+import 'package:chat_app/features/auth/presentation/view_model/auth_states.dart';
 import 'package:chat_app/features/auth/presentation/views/widgets/login_image_and_text.dart';
 import 'package:chat_app/features/auth/presentation/views/widgets/dont_have_an_account.dart';
-import 'package:chat_app/features/chats/presentation/views/chats_list_view.dart';
+import 'package:chat_app/features/chats/presentation/view_model/get_chats_data_cubit.dart';
+import 'package:chat_app/features/chats/presentation/view_model/get_chats_data_states.dart';
+import 'package:chat_app/features/chats/presentation/views/home.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -61,28 +65,48 @@ class _LoginViewState extends State<LoginView> {
                   }
                 ,),
                   verticalSpace(30),
-                   ButtonWidget(buttonText: 'Login',buttonBackgroundColor:ColorManager.mainColor,buttonTextStyle: black17Bold,
-                   onPressed: () async{
-                    Login();
-                   }
-                   ),
-                  verticalSpace(30),
+                  BlocListener<AuthCubit,AuthStates>(
+                    listener: (context, state){
+                       if(state is SuccessLoginState){
+                         final  currentUserData = state.currentUserData;
+                         Navigator.pushReplacement( context, MaterialPageRoute(builder: (context)=>
+                                     BlocProvider(
+                                    create: (context) => getIt<GetChatsDataCubit>()..getChatsData(),
+                                    child: BlocBuilder<GetChatsDataCubit, GetChatsDataStates>(
+                                builder: (context, state) {
+                              if (state is GetChatsDataSuccessState) {
+                            return  Home(unSearchChats: state.chatsListViewData,currentUserData: currentUserData);
+                              }
+                              return Container();
+                             },),
+                              ),
+                                ));
+                                  }
+                                 },
+                    child: ButtonWidget(buttonText: 'Login',buttonBackgroundColor:ColorManager.mainColor,buttonTextStyle: black17Bold,
+                       onPressed: (){
+                        if(formKey.currentState!.validate()){
+                       context.read<AuthCubit>().loginUser(emailController.text, passwordController.text);
+                      }}),
+                  ),
+                   verticalSpace(30),
                  const DontHaveAnAccount(),
-                           
-                           
-                ],),
-                           ),
-             ),
-          ),
-        ),
-      );
-  }
-  Login()async{
- if(formKey.currentState!.validate()){
-  bool success = await context.read<AuthCubit>().loginUser(emailController.text , passwordController.text);
-  if(success==true){
-  Navigator.pushReplacement( context, MaterialPageRoute(builder: (context)=>const ChatsView()));
-                      }}
-  }
-}
+                  
+                  
+                  ]
+                      )
+
+                      
+                      )
+                      )
+                      
+                      
+             ))
+                        );
+                    
+                     
+                       }
+                       }
+                       
+
 

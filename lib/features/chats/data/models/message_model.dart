@@ -1,35 +1,36 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class MessageModel {
-   String messageId;
-   String senderId;
-   String message;
-   Timestamp timestamp;
-   String type; 
+  final String messageId;
+  final String message;
+  final String senderId;
+  final DateTime? timestamp;
+  final String type;
 
   MessageModel({
     required this.messageId,
-    required this.senderId,
     required this.message,
+    required this.senderId,
     required this.timestamp,
     required this.type,
   });
 
-  factory MessageModel.fromFirestore(Map<String, dynamic> data) {
+  // Factory method to create a MessageModel from Firestore data
+  factory MessageModel.fromFirestore(Map<String, dynamic> data, String id) {
     return MessageModel(
-      messageId: data['messageId'],
-      senderId: data['senderId'],
-      message: data['message'],
-      timestamp:data['timestamp'],
-      type: data['type'],
+      messageId: id,
+      message: data['message'] ?? '',
+      senderId: data['senderId'] ?? '',
+      timestamp: (data['timestamp'] as Timestamp?)?.toDate(),
+      type: data['type'] ?? 'text',
     );
   }
 
-  Map<String, dynamic> toJson() {
+  // Method to convert MessageModel to a Firestore-friendly format
+  Map<String, dynamic> toFirestore() {
     return {
-      'messageId': messageId,
-      'senderId': senderId,
       'message': message,
+      'senderId': senderId,
       'timestamp': timestamp,
       'type': type,
     };

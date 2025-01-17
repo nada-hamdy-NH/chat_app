@@ -1,4 +1,5 @@
 import 'package:chat_app/features/auth/data/models/auth_model.dart';
+import 'package:chat_app/features/chats/data/models/chat_model.dart';
 import 'package:chat_app/features/chats/data/models/message_model.dart';
 
 class User{
@@ -20,4 +21,7 @@ PersonStatus({required this.name , required this.image , required this.date , re
 List <MessageModel>chatMessages=[];
 
 List<UserModel>userData = [];
+
+List<UserModel>usersOfGroup = [];
+List<ChatModel> listOfChatModel=[];
 
